@@ -58,10 +58,10 @@
                                             <td><?= $n['username'] ?></td>
                                             <td><?= $n['nama'] ?></td>
                                             <td><?= $n['last_login'] ?></td>
-
                                             <td>
-                                                <!-- <a href="<?= base_url() ?>admin/edit/<?= $n['id_user'] ?>" class="btn btn-success"><i class="ti ti-edit"></i></a> -->
-                                                <a href="<?= base_url() ?>admin/delete/<?= $n['id_user'] ?>" class="btn btn-danger"><i class="ti ti-trash"></i></a>
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $n['id_user'] ?>">
+                                                    <i class="ti ti-edit"></i>
+                                                </button> <a href="<?= base_url() ?>admin/delete/<?= $n['id_user'] ?>" class="btn btn-danger"><i class="ti ti-trash"></i></a>
                                             </td>
                                         </tr>
 
@@ -113,3 +113,40 @@
         </div>
     </div>
 </div>
+
+<?php
+$no = 0;
+foreach ($pegawai as $n) : $no++
+?>
+    <div class="modal fade" id="exampleModal<?= $n['id_user'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update data </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="<?= base_url('admin/updatepegawai') ?>" method="post">
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">nama</label>
+                            <input type="text" class="form-control" name="nama" id="nama" value="<?= $n['nama'] ?>">
+                            <input type="hidden" class="form-control" name="id_user" id="id_user" value="<?= $n['id_user'] ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">username</label>
+                            <input type="text" class="form-control" name="username" id="username" value="<?= $n['username'] ?>">
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="password" class="form-label">password</label>
+                            <input type="password" class="form-control" name="password" id="password" value="<?= $n['password'] ?>">
+                        </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endforeach ?>

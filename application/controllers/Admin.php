@@ -7,6 +7,9 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper('sweet_alert');
+        $this->load->helper('url');
+        $this->load->library('form_validation');
         $this->load->model('user_model');
         $this->load->model('auth_model');
         if (!$this->auth_model->current_user()) {
@@ -16,94 +19,152 @@ class Admin extends CI_Controller
     public function index()
     {
         $data = [
-            'title'  => "Home/Dashboard",
+            'title'  => "Dashboard",
             'user'   => $this->user_model->getuser(),
-            'masuk' => $this->db->count_all_results('suratmasuk'),
-            'pegawai' => $this->db->count_all_results('user'),
-            'keluar' => $this->db->count_all_results('surat')
+            'responden' => $this->db->count_all_results('responden'),
+            'instansi' => $this->db->count_all_results('user'),
         ];
         $this->load->view('pages/head', $data);
         $this->load->view('pages/nav');
         $this->load->view('admin/index', $data);
         $this->load->view('pages/footer');
     }
-    public function suratmasuk()
+    public function pelayanan()
     {
+        $id = $this->user_model->getuser();
         $data = [
-            'title'  => "Persuratan/Surat Masuk",
+            'title'  => "Pelayanan",
             'user'   => $this->user_model->getuser(),
-            'nomor' => $this->db->get('suratmasuk')->result_array()
-        ];
-        $this->load->view('pages/head', $data);
-        $this->load->view('pages/nav');
-        $this->load->view('admin/suratmasuk', $data);
-        $this->load->view('pages/footer');
-    }
-    public function suratkeluar()
-    {
-        $ns = $this->db->order_by('id_surat', 'DESC')->get('surat')->result_array();
-
-        $data = [
-            'title'  => "Persuratan/Surat Keluar",
-            'user'   => $this->user_model->getuser(),
-            'nomor' => $ns
+            'pelayanan' => $this->db->get_where('pelayanan', ['id_user' => $id['id_user']])->result_array()
 
         ];
         $this->load->view('pages/head', $data);
         $this->load->view('pages/nav');
-        $this->load->view('admin/suratkeluar', $data);
+        $this->load->view('admin/pelayanan', $data);
         $this->load->view('pages/footer');
     }
-    public function pegawai()
+    public function lihat($id)
     {
         $data = [
-            'title'  => "Settings/Pegawai",
+            'title'  => "Hasil SKM",
             'user'   => $this->user_model->getuser(),
-            'pegawai' => $this->db->get_where('user', ['level' => 2])->result_array()
+            'skm' => $this->user_model->getlihat($id)
         ];
         $this->load->view('pages/head', $data);
         $this->load->view('pages/nav');
-        $this->load->view('admin/pegawai', $data);
+        $this->load->view('admin/lihat', $data);
         $this->load->view('pages/footer');
     }
+    public function kuisioner($id)
+    {
+        $data = [
+            'title'  => "Hasil SKM",
+            'user'   => $this->user_model->getuser(),
+            'kuis' => $this->user_model->getkuis($id)
+        ];
+        $this->load->view('pages/head', $data);
+        $this->load->view('pages/nav');
+        $this->load->view('admin/kuis', $data);
+        $this->load->view('pages/footer');
+    }
+    public function periode()
+    {
+        $id = $this->user_model->getuser();
+        $data = [
+            'title'  => "periode",
+            'user'   => $this->user_model->getuser(),
+            'periode' => $this->db->get('periode')->result_array()
+
+        ];
+        $this->load->view('pages/head', $data);
+        $this->load->view('pages/nav');
+        $this->load->view('admin/periode', $data);
+        $this->load->view('pages/footer');
+    }
+    public function user()
+    {
+        $id = $this->user_model->getuser();
+        $data = [
+            'title'  => "periode",
+            'user'   => $this->user_model->getuser(),
+            'pegawai' => $this->db->get('user')->result_array()
+
+        ];
+        // $this->load->view('pages/head', $data);
+        // $this->load->view('pages/nav');
+        $this->load->view('admin/user', $data);
+        // $this->load->view('pages/footer');
+    }
+    public function profile()
+    {
+        $id = $this->user_model->getuser();
+        $data = [
+            'title'  => "Profile",
+            'user'   => $this->user_model->getuser(),
+        ];
+        if ($this->input->method() === 'post') {
+            $rules = $this->user_model->password_rules();
+            $this->form_validation->set_rules($rules);
+
+            if ($this->form_validation->run() === FALSE) {
+                $this->load->view('pages/head', $data);
+                $this->load->view('pages/nav');
+                $this->load->view('admin/profile', $data);
+                $this->load->view('pages/footer');
+            }
+            $new_password_data = [
+                'id_user' => $id['id_user'],
+                'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+            ];
+
+            if ($this->user_model->update($new_password_data)) {
+                $this->session->set_flashdata('success', 'Password was changed');
+                redirect('admin/profile');
+            }
+        }
+
+        $this->load->view('pages/head', $data);
+        $this->load->view('pages/nav');
+        $this->load->view('admin/profile', $data);
+        $this->load->view('pages/footer');
+    }
+
+
     public function tambah()
     {
         $data = [
-            'nomor' => $this->input->post('nomor'),
-            'tanggal' => $this->input->post('tanggal'),
-            'perihal' => $this->input->post('perihal'),
-            'pemohon' => $this->input->post('pemohon'),
-            'penerima' => $this->input->post('penerima'),
+            'pelayanan' => $this->input->post('pelayanan'),
+            'id_user' => $this->input->post('id_user'),
+
+        ];
+        $this->db->insert('pelayanan', $data);
+        $this->session->set_flashdata('success', 'Data berhasil ditambahkan.');
+        redirect('pelayanan');
+    }
+    public function tambahuser()
+    {
+        $data = [
+            'nama' => $this->input->post('nama'),
+            'username' => $this->input->post('username'),
+            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+
+        ];
+        $this->db->insert('user', $data);
+        $this->session->set_flashdata('success', 'Data berhasil ditambahkan.');
+        redirect('user');
+    }
+    public function tambahperiode()
+    {
+        $data = [
+            'tahun' => $this->input->post('tahun'),
             'active' => 1,
+
         ];
-        $this->db->insert('surat', $data);
+        $this->db->insert('periode', $data);
         $this->session->set_flashdata('success', 'Data berhasil ditambahkan.');
-        redirect('surat-keluar');
+        redirect('periode');
     }
-    public function tambahsuratmasuk()
-    {
-        $data = [
-            'nomor' => $this->input->post('nomor'),
-            'tanggal' => $this->input->post('tanggal'),
-            'perihal' => $this->input->post('perihal'),
-            'dari' => $this->input->post('dari'),
-            'tujuan' => $this->input->post('tujuan'),
-        ];
-        $this->db->insert('suratmasuk', $data);
-        $this->session->set_flashdata('success', 'Data berhasil ditambahkan.');
-        redirect('surat-masuk');
-    }
-    public function validasi()
-    {
-        $id = $this->input->post('id_surat');
-        $data = [
-            'active' => $this->input->post('active'),
-        ];
-        $this->db->where('id_surat', $id);
-        $this->db->update('surat', $data);
-        $this->session->set_flashdata('success', 'Data berhasil Di Approve.');
-        redirect('surat-keluar');
-    }
+
     public function update()
     {
         $id = $this->input->post('id_surat');
@@ -119,47 +180,63 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('success', 'Data berhasil Di Ubah.');
         redirect('surat-keluar');
     }
-    public function updatesuratmasuk()
+    public function editpel()
     {
-        $id = $this->input->post('id_suratmasuk');
+        $id = $this->input->post('id_pelayanan');
         $data = [
-            'nomor' => $this->input->post('nomor'),
-            'tanggal' => $this->input->post('tanggal'),
-            'perihal' => $this->input->post('perihal'),
-            'dari' => $this->input->post('dari'),
-            'tujuan' => $this->input->post('tujuan'),
-        ];
-        $this->db->where('id_suratmasuk', $id);
-        $this->db->update('suratmasuk', $data);
-        $this->session->set_flashdata('success', 'Data berhasil Di Ubah.');
-        redirect('surat-masuk');
-    }
-    public function tambahuser()
-    {
+            'pelayanan' => $this->input->post('pelayanan'),
 
+        ];
+        $this->db->where('id_pelayanan', $id);
+        $this->db->update('pelayanan', $data);
+        $this->session->set_flashdata('success', 'Data berhasil Di Ubah.');
+        redirect('pelayanan');
+    }
+    public function updateperiode()
+    {
+        $id = $this->input->post('id_periode');
+        $data = [
+            'tahun' => $this->input->post('tahun'),
+            'active' => $this->input->post('active'),
+
+        ];
+        $this->db->where('id_periode', $id);
+        $this->db->update('periode', $data);
+        $this->session->set_flashdata('success', 'Data berhasil Di Ubah.');
+        redirect('periode');
+    }
+    public function updateuser()
+    {
+        $id = $this->input->post('id_user');
         $data = [
             'username' => $this->input->post('username'),
-            'nama' => $this->input->post('nama'),
-            'level' => 2,
-            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT)
+            'nama' => $this->input->post('nama')
         ];
-        $this->db->insert('user', $data);
-        $this->session->set_flashdata('success', 'Data berhasil ditambah.');
+        $this->db->where('id_user', $id);
+        $this->db->update('user', $data);
+        $this->session->set_flashdata('success', 'Data berhasil Di Ubah.');
+        redirect('user');
+    }
 
-        redirect('pegawai');
-    }
-    public function delete($id)
+    public function deletepelayanan($id)
     {
-        $this->db->where('id_surat', $id);
-        $this->db->delete('surat');
+        $this->db->where('id_pelayanan', $id);
+        $this->db->delete('pelayanan');
         $this->session->set_flashdata('success', 'Data berhasil dihapus.');
-        redirect('surat-keluar');
+        redirect('admin/pelayanan');
     }
-    public function deletesuratmasuk($id)
+    public function deleteperiode($id)
     {
-        $this->db->where('id_suratmasuk', $id);
-        $this->db->delete('suratmasuk');
+        $this->db->where('id_periode', $id);
+        $this->db->delete('periode');
         $this->session->set_flashdata('success', 'Data berhasil dihapus.');
-        redirect('surat-masuk');
+        redirect('periode');
+    }
+    public function deleteuser($id)
+    {
+        $this->db->where('id_user', $id);
+        $this->db->delete('user');
+        $this->session->set_flashdata('success', 'Data berhasil dihapus.');
+        redirect('user');
     }
 }

@@ -3,7 +3,7 @@
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a href="<?= base_url('dashboard') ?>" class="text-nowrap logo-img">
-                <img src="<?= base_url() ?>assets/images/logos/diskominfo.png" width="180" alt="" />
+                <img src="<?= base_url() ?>assets/images/logoskm.png" width="100%" alt="" />
             </a>
             <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                 <i class="ti ti-x fs-8"></i>
@@ -27,35 +27,35 @@
                     </li>
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                        <span class="hide-menu">PERSURATAN</span>
+                        <span class="hide-menu">Master</span>
                     </li>
+
                     <li class="sidebar-item">
-                        <a class="sidebar-link <?= $this->router->class == 'surat-masuk' ? 'active' : ''; ?> " href=" <?= base_url() ?>surat-masuk" aria-expanded="false">
+                        <a class="sidebar-link <?= $this->router->class == 'periode' ? 'active' : ''; ?> " href=" <?= base_url() ?>periode" aria-expanded="false">
                             <span>
                                 <i class="ti ti-article"></i>
                             </span>
-                            <span class="hide-menu">Surat Masuk</span>
+                            <span class="hide-menu">Periode</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link <?= $this->router->class == 'surat-keluar' ? 'active' : ''; ?> " href=" <?= base_url() ?>surat-keluar" aria-expanded="false">
+                        <a class="sidebar-link <?= $this->router->class == 'user' ? 'active' : ''; ?> " href=" <?= base_url() ?>user" aria-expanded="false">
                             <span>
-                                <i class="ti ti-article"></i>
+                                <i class="ti ti-user"></i>
                             </span>
-                            <span class="hide-menu">Surat Keluar</span>
+                            <span class="hide-menu">User</span>
                         </a>
                     </li>
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                        <span class="hide-menu">SETTINGS</span>
+                        <span class="hide-menu">Laporan</span>
                     </li>
-
                     <li class="sidebar-item">
-                        <a class="sidebar-link <?= $this->router->class == 'pegawai' ? 'active' : ''; ?> " href=" <?= base_url() ?>pegawai" aria-expanded="false">
+                        <a class="sidebar-link <?= $this->router->class == 'laporan' ? 'active' : ''; ?> " href=" <?= base_url() ?>laporan" aria-expanded="false">
                             <span>
-                                <i class="ti ti-mood-happy"></i>
+                                <i class="ti ti-report"></i>
                             </span>
-                            <span class="hide-menu">Pegawai</span>
+                            <span class="hide-menu">Laporan</span>
                         </a>
                     </li>
                 <?php else : ?>
@@ -73,16 +73,54 @@
                     </li>
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                        <span class="hide-menu">PERSURATAN</span>
+                        <span class="hide-menu">Menu</span>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link <?= $this->router->class == 'nomor-surat' ? 'active' : ''; ?> " href=" <?= base_url() ?>nomor-surat" aria-expanded="false">
+                        <a class="sidebar-link <?= $this->router->class == 'pelayanan' ? 'active' : ''; ?> " href=" <?= base_url() ?>pelayanan" aria-expanded="false">
                             <span>
                                 <i class="ti ti-article"></i>
                             </span>
-                            <span class="hide-menu">Nomor Surat</span>
+                            <span class="hide-menu">Pelayanan</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link <?= $this->router->class == 'kuisioner' ? 'active' : ''; ?> " href=" <?= base_url() ?>kuisioner" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-article"></i>
+                            </span>
+                            <span class="hide-menu">Kuisioner</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Laporan</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link <?= $this->router->class == 'hasil-keseluruhan' ? 'active' : ''; ?> " href=" <?= base_url() ?>hasil-keseluruhan" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-report"></i>
+                            </span>
+                            <span class="hide-menu">Keseluruhan</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link <?= $this->router->class == 'hasil-pelayanan' ? 'active' : ''; ?> " href=" <?= base_url() ?>hasil-pelayanan" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-report"></i>
+                            </span>
+                            <span class="hide-menu">Pelayanan</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link <?= $this->router->class == 'responden' ? 'active' : ''; ?> " href=" <?= base_url() ?>responden" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-report"></i>
+                            </span>
+                            <span class="hide-menu">Responden</span>
+                        </a>
+                    </li>
+
                 <?php endif ?>
             </ul>
             <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
@@ -127,7 +165,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                             <div class="message-body">
-                                <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                <a href="<?= base_url('profile') ?>" class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-user fs-6"></i>
                                     <p class="mb-0 fs-3"><b><?= $user['nama'] ?></b></p>
                                 </a>
@@ -139,3 +177,18 @@
             </div>
         </nav>
     </header>
+    <section class="content-header mb-5">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1><?= $title ?></h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active"> <?= $title ?></li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>

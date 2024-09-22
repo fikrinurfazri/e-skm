@@ -4,24 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistem Pengelola Nomor Surat</title>
-    <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/images/logos/logo.png" />
+    <title>e-skm tasikmalaya</title>
+    <link rel="shortcut icon" type="image/png" href="<?= base_url() ?>assets/images/skm.png" />
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.min.css" />
-    <style>
-        /* CSS untuk mengatur tampilan video menjadi landscape */
-        #video {
-            transform: rotate(360deg);
-            width: 45vh;
-            height: 50vw;
-            object-fit: cover;
-        }
 
-        @media (min-width: 768px) {
-            #video {
-                display: none;
-            }
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
 </head>
 
 <body>
